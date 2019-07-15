@@ -72,5 +72,4 @@ test_windows_task:
   test_script:
     - rmdir /s /q .git
     - make
-    - bin\elixir bin\mix format --check-formatted
-    - make --keep-going test_erlang test_elixir
+    - make --keep-going test_windows
