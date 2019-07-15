@@ -250,7 +250,7 @@ TEST_ERLS = $(addprefix $(TEST_EBIN)/, $(addsuffix .beam, $(basename $(notdir $(
 
 test_formatted: compile
 	if [ "$(OS)" = "Windows_NT" ]; then \
-		bin\\elixir bin\\mix format --check-formatted;
+		bin\\elixir bin\\mix format --check-formatted; \
 	else \
 		bin/elixir bin/mix format --check-formatted; \
 	fi
