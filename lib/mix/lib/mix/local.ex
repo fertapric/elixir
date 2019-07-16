@@ -25,9 +25,7 @@ defmodule Mix.Local do
 
   def name_for(:escript, project) do
     case get_in(project, [:escript, :name]) do
-      nil ->
-        project[:app]
-
+      nil -> project[:app]
       name -> name
     end
     |> to_string()
