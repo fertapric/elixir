@@ -72,4 +72,4 @@ test_windows_task:
   test_script:
     - rmdir /s /q .git
     - make
-    - make --keep-going test_windows
+    - make test
