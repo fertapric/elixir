@@ -42,7 +42,7 @@ test_task:
     # - otp/Install -minimal $(pwd)/otp
 
   test_script:
-    - exit
+    - exit 1
     # - PATH=$(pwd)/otp/bin:$PATH
     # - rm -rf .git
     # - ELIXIRC_OPTS="--warnings-as-errors" ERLC_OPTS="+warning_as_errors" make compile
