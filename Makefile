@@ -143,7 +143,52 @@ check_reproducible: compile
 	SOURCE_DATE_EPOCH=$(call READ_SOURCE_DATE_EPOCH) $(MAKE) compile
 	$(Q) echo "Diffing..."
 	$(Q) ./bindiff lib/elixir/ebin/Elixir.FunctionClauseError.beam lib/elixir/tmp/ebin_reproducible/Elixir.FunctionClauseError.beam
-	$(Q) diff -r lib/elixir/ebin/ lib/elixir/tmp/ebin_reproducible/
+	$(Q) diff -rq lib/elixir/ebin/ lib/elixir/tmp/ebin_reproducible/ | elixir -e '
+lines = IO.stream(:stdio, :line)
+
+all_chunks = fn path ->
+  {:ok, binary} = File.read(path)
+  {:ok, _, chunks} = :beam_lib.all_chunks(binary)
+  chunks
+end
+
+decode_chunks = fn chunks ->
+  for {chunk_id, data} <- chunks do
+    try do
+      {chunk_id, :erlang.binary_to_term(data)}
+    rescue
+      _ -> {chunk_id, data}
+    end
+  end
+end
+
+beam_diff = fn path1, path2 ->
+  chunks1 = all_chunks.(path1)
+  chunks2 = all_chunks.(path2)
+
+  diff1 = chunks1 -- chunks2
+  diff2 = chunk2 -- chunks1
+
+  {decode_chunks.(diff1), decode_chunks.(diff2)}
+end
+
+Enum.each(lines, fn
+  "Only in " <> _ = line ->
+    IO.puts line
+
+  line ->
+    case Regex.named_captures(~r/Files (?<path1>.*) and (?<path2>.*) differ/, line) do
+      nil ->
+        :noop
+
+      %{"path1" => path1, "path2" => path2} ->
+        if String.ends_with?(".beam") do
+          beam_diff(path1, path2)
+        else
+          IO.puts line
+        end
+    end
+end)'
 	$(Q) diff -r lib/eex/ebin/ lib/eex/tmp/ebin_reproducible/
 	$(Q) diff -r lib/iex/ebin/ lib/iex/tmp/ebin_reproducible/
 	$(Q) diff -r lib/logger/ebin/ lib/logger/tmp/ebin_reproducible/
