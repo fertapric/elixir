@@ -143,7 +143,7 @@ check_reproducible: compile
 	SOURCE_DATE_EPOCH=$(call READ_SOURCE_DATE_EPOCH) $(MAKE) compile
 	$(Q) echo "Diffing..."
 	$(Q) ./bindiff lib/elixir/ebin/Elixir.FunctionClauseError.beam lib/elixir/tmp/ebin_reproducible/Elixir.FunctionClauseError.beam
-	$(Q) diff -rq lib/elixir/ebin/ lib/elixir/tmp/ebin_reproducible/ | elixir -e '
+	$(Q) diff -rq lib/elixir/ebin/ lib/elixir/tmp/ebin_reproducible/ diff -rq a b | elixir -e '
 lines = IO.stream(:stdio, :line)
 
 all_chunks = fn path ->
@@ -167,7 +167,7 @@ beam_diff = fn path1, path2 ->
   chunks2 = all_chunks.(path2)
 
   diff1 = chunks1 -- chunks2
-  diff2 = chunk2 -- chunks1
+  diff2 = chunks2 -- chunks1
 
   {decode_chunks.(diff1), decode_chunks.(diff2)}
 end
@@ -182,8 +182,8 @@ Enum.each(lines, fn
         :noop
 
       %{"path1" => path1, "path2" => path2} ->
-        if String.ends_with?(".beam") do
-          beam_diff(path1, path2)
+        if String.ends_with?(path1, ".beam") do
+          beam_diff.(path1, path2)
         else
           IO.puts line
         end
