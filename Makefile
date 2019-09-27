@@ -143,7 +143,7 @@ check_reproducible: compile
 	SOURCE_DATE_EPOCH=$(call READ_SOURCE_DATE_EPOCH) $(MAKE) compile
 	$(Q) echo "Diffing..."
 	$(Q) ./bindiff lib/elixir/ebin/Elixir.FunctionClauseError.beam lib/elixir/tmp/ebin_reproducible/Elixir.FunctionClauseError.beam
-	$(Q) diff -rq lib/elixir/ebin/ lib/elixir/tmp/ebin_reproducible/ | elixir beamdiff.exs
+	$(Q) diff -rq lib/elixir/ebin/ lib/elixir/tmp/ebin_reproducible/ | bin/elixir beamdiff.exs
 	$(Q) diff -r lib/eex/ebin/ lib/eex/tmp/ebin_reproducible/
 	$(Q) diff -r lib/iex/ebin/ lib/iex/tmp/ebin_reproducible/
 	$(Q) diff -r lib/logger/ebin/ lib/logger/tmp/ebin_reproducible/
