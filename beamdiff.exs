@@ -37,7 +37,7 @@ Enum.each(lines, fn
 
       %{"path1" => path1, "path2" => path2} ->
         if String.ends_with?(path1, ".beam") do
-          IO.inspect beam_diff.(path1, path2)
+          IO.inspect beam_diff.(path1, path2), printable_limit: :infinity, limit: :infinity
         else
           IO.puts line
         end
