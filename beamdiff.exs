@@ -16,6 +16,7 @@ decode_chunks = fn chunks ->
   end
 end
 
+
 beam_diff = fn path1, path2 ->
   chunks1 = all_chunks.(path1)
   chunks2 = all_chunks.(path2)
