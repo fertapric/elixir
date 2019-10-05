@@ -351,7 +351,7 @@ do_quote_import(Name, Meta, ArgsOrAtom, #elixir_quote{imports_hygiene=true} = Q,
   NewMeta = case (keyfind(import, Meta) == false) andalso
       elixir_dispatch:find_import(Meta, Name, Arity, E) of
     false ->
-      Name =:= is_list andalso io:format("DO QUOTE NOT IMPORT ~p~n", {Name, Meta, keyfind(import, Meta), E}),
+      Name =:= is_list andalso io:format("DO QUOTE NOT IMPORT ~p~n", [{Name, Meta, keyfind(import, Meta), E}]),
       case (Arity == 1) andalso keyfind(ambiguous_op, Meta) of
         {ambiguous_op, nil} -> keystore(ambiguous_op, Meta, Q#elixir_quote.context);
         _ -> Meta
