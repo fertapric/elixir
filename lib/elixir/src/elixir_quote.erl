@@ -372,8 +372,8 @@ do_quote_fa(Target, Meta, Args, F, A, Q, E) ->
   NewMeta =
     case elixir_dispatch:find_import(Meta, F, A, E) of
       false ->
-      F =:= is_list andalso io:format("DO QUOTE FA NOT IMPORT ~p~n", [{F, Meta, E}]),
-      Meta;
+        F =:= is_list andalso io:format("DO QUOTE FA NOT IMPORT ~p~n", [{F, Meta, E}]),
+        Meta;
       Receiver ->
         lists:keystore(context, 1,
           lists:keystore(import, 1, Meta, {import, Receiver}),
