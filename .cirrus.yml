@@ -11,28 +11,28 @@ test_task:
         OTP_RELEASE: OTP-22.0
         CHECK_REPRODUCIBLE: true
         CHECK_POSIX_COMPLIANT: true
-    - env:
-        OTP_RELEASE: OTP-21.3.8
-    - env:
-        OTP_RELEASE: OTP-21.2
-    - env:
-        OTP_RELEASE: OTP-21.1
-    - env:
-        OTP_RELEASE: OTP-21.0
-    - env:
-        OTP_RELEASE: OTP-20.3
-    - env:
-        OTP_RELEASE: OTP-20.2
-    - env:
-        OTP_RELEASE: OTP-20.1
-    - env:
-        OTP_RELEASE: OTP-20.0
-    - env:
-        OTP_RELEASE: maint
-      allow_failures: true
-    - env:
-        OTP_RELEASE: master
-      allow_failures: true
+    # - env:
+    #     OTP_RELEASE: OTP-21.3.8
+    # - env:
+    #     OTP_RELEASE: OTP-21.2
+    # - env:
+    #     OTP_RELEASE: OTP-21.1
+    # - env:
+    #     OTP_RELEASE: OTP-21.0
+    # - env:
+    #     OTP_RELEASE: OTP-20.3
+    # - env:
+    #     OTP_RELEASE: OTP-20.2
+    # - env:
+    #     OTP_RELEASE: OTP-20.1
+    # - env:
+    #     OTP_RELEASE: OTP-20.0
+    # - env:
+    #     OTP_RELEASE: maint
+    #   allow_failures: true
+    # - env:
+    #     OTP_RELEASE: master
+    #   allow_failures: true
 
   install_script:
     - wget -O otp.tar.gz https://repo.hex.pm/builds/otp/ubuntu-14.04/${OTP_RELEASE}.tar.gz
@@ -44,8 +44,8 @@ test_task:
     - PATH=$(pwd)/otp/bin:$PATH
     - rm -rf .git
     - ELIXIRC_OPTS="--warnings-as-errors" ERLC_OPTS="+warning_as_errors" make compile
-    - make test
-    - dialyzer -pa lib/elixir/ebin --build_plt --output_plt elixir.plt --apps lib/elixir/ebin/elixir.beam lib/elixir/ebin/Elixir.Kernel.beam
+    #- make test
+    #- dialyzer -pa lib/elixir/ebin --build_plt --output_plt elixir.plt --apps lib/elixir/ebin/elixir.beam lib/elixir/ebin/Elixir.Kernel.beam
 
     # Check for reproducible builds only in the latest OTP release
     - if [ -n "$CHECK_REPRODUCIBLE" ]; then make check_reproducible; fi
@@ -59,17 +59,17 @@ test_task:
         shellcheck bin/iex && echo "bin/iex is POSIX compliant";
       fi
 
-test_windows_task:
-  windows_container:
-    matrix:
-      - image: fertapric/elixir-ci:otp-win64-22.0
-        os_version: 2019
-      - image: fertapric/elixir-ci:otp-win64-21.0.1
-        os_version: 2019
-      - image: fertapric/elixir-ci:otp-win64-20.0
-        os_version: 2019
-
-  test_script:
-    - rmdir /s /q .git
-    - make
-    - make --keep-going test_erlang test_elixir
+# test_windows_task:
+#   windows_container:
+#     matrix:
+#       - image: fertapric/elixir-ci:otp-win64-22.0
+#         os_version: 2019
+#       - image: fertapric/elixir-ci:otp-win64-21.0.1
+#         os_version: 2019
+#       - image: fertapric/elixir-ci:otp-win64-20.0
+#         os_version: 2019
+#
+#   test_script:
+#     - rmdir /s /q .git
+#     - make
+#     - make --keep-going test_erlang test_elixir

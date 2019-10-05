@@ -340,7 +340,9 @@ elixir_imported_functions() ->
   try
     ?kernel:'__info__'(functions)
   catch
-    error:undef -> []
+    error:undef ->
+    io:format("CANNOT LOAD KERNEL FUNCTIONS ~p", [1]),
+    []
   end.
 
 elixir_imported_macros() ->
