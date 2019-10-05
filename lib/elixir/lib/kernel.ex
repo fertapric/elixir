@@ -4432,8 +4432,13 @@ defmodule Kernel do
       end
 
       # TODO: Change the implementation on v2.0 to simply call Kernel.struct!/2
+      # Calls to Kernel functions must be fully-qualified to ensure
+      # reproducible builds; otherwise, exceptions will generate ASTs
+      # with different metadata (:import, :context) depending on if
+      # they were compiled with the bootstrapped Kernel or the final
+      # Kernel.
       @impl true
-      def exception(args) when is_list(args) do
+      def exception(args) when Kernel.is_list(args) do
         struct = __struct__()
         {valid, invalid} = Enum.split_with(args, fn {k, _} -> Map.has_key?(struct, k) end)
 
@@ -4444,9 +4449,9 @@ defmodule Kernel do
           _ ->
             IO.warn(
               "the following fields are unknown when raising " <>
-                "#{inspect(__MODULE__)}: #{inspect(invalid)}. " <>
+                "#{Kernel.inspect(__MODULE__)}: #{Kernel.inspect(invalid)}. " <>
                 "Please make sure to only give known fields when raising " <>
-                "or redefine #{inspect(__MODULE__)}.exception/1 to " <>
+                "or redefine #{Kernel.inspect(__MODULE__)}.exception/1 to " <>
                 "discard unknown fields. Future Elixir versions will raise on " <>
                 "unknown fields given to raise/2"
             )
