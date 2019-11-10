@@ -798,14 +798,18 @@ defmodule System do
       do_cmd(Port.open({:spawn_executable, cmd}, opts), initial, fun)
     catch
       kind, reason ->
+        IO.inspect(msg, label: "inside catch")
         fun.(initial, :halt)
         :erlang.raise(kind, reason, __STACKTRACE__)
     else
-      {acc, status} -> {fun.(acc, :done), status}
+      {acc, status} ->
+        Process.flag(:trap_exit, false)
+        {fun.(acc, :done), status}
     end
   end
 
   defp do_cmd(port, acc, fun) do
+    Process.flag(:trap_exit, true)
     IO.inspect(acc, label: "cmd receive")
 
     receive do
