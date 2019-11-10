@@ -8,7 +8,7 @@ Application.put_env(:logger, :backends, [])
 IO.inspect("BEFORE 1")
 os_exclude = if match?({:win32, _}, :os.type()), do: [unix: true], else: [windows: true]
 IO.inspect("BEFORE 2")
-epmd_exclude = if match?({_, 0}, System.cmd("epmd", ["-daemon"])), do: [], else: [epmd: true]
+epmd_exclude = [] #if match?({_, 0}, System.cmd("epmd", ["-daemon"])), do: [], else: [epmd: true]
 IO.inspect("BEFORE 3")
 ExUnit.start(trace: "--trace" in System.argv(), exclude: epmd_exclude ++ os_exclude)
 IO.inspect("BEFORE 3")

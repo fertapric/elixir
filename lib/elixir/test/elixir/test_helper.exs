@@ -83,9 +83,14 @@ defmodule CodeFormatterHelpers do
   end
 end
 
+IO.inspect("BEFORE 1")
+
 assert_timeout = String.to_integer(System.get_env("ELIXIR_ASSERT_TIMEOUT") || "500")
+IO.inspect("BEFORE 2")
 epmd_exclude = if match?({_, 0}, System.cmd("epmd", ["-daemon"])), do: [], else: [epmd: true]
+IO.inspect("BEFORE 3")
 os_exclude = if PathHelpers.windows?(), do: [unix: true], else: [windows: true]
+IO.inspect("BEFORE 4")
 
 ExUnit.start(
   trace: "--trace" in System.argv(),
