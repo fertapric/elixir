@@ -786,19 +786,24 @@ defmodule System do
 
     cmd =
       if Path.type(cmd) == :absolute do
+        IO.inspect(cmd, label: "ABSOLUTE EXECUTABLE")
         cmd
       else
+        IO.inspect(:os.find_executable(cmd), label: "FIND EXECUTABLE")
         :os.find_executable(cmd) || :erlang.error(:enoent, [command, args, opts])
       end
+
 
     {into, opts} = cmd_opts(opts, [:use_stdio, :exit_status, :binary, :hide, args: args], "")
     {initial, fun} = Collectable.into(into)
 
     try do
+      Process.flag(:trap_exit, true)
+      IO.inspect(cmd, label: "BEFORE PORT OPEN WITH COMMAND")
       do_cmd(Port.open({:spawn_executable, cmd}, opts), initial, fun)
     catch
       kind, reason ->
-        IO.inspect({kind, reason}, label: "inside catch")
+        IO.inspect({kind, reason}, label: "CATCH ERROR")
         fun.(initial, :halt)
         :erlang.raise(kind, reason, __STACKTRACE__)
     else
@@ -809,20 +814,22 @@ defmodule System do
   end
 
   defp do_cmd(port, acc, fun) do
-    Process.flag(:trap_exit, true)
-    IO.inspect(acc, label: "cmd receive")
+    IO.inspect(acc, label: "DO_CMD LOOP BEFORE RECEIVE WITH ACC")
 
     receive do
       {^port, {:data, data}} ->
-        IO.inspect({acc, data}, label: "cmd loop")
+        IO.inspect({acc, data}, label: "DO_CMD RECEIVED DATA")
         do_cmd(port, fun.(acc, {:cont, data}), fun)
 
       {^port, {:exit_status, status}} ->
-        IO.inspect(status, label: "cmd exit")
+        IO.inspect(status, label: "DO_CMD EXIT STATUS")
         {acc, status}
 
       msg ->
-        IO.inspect(msg, label: "cmd, unexpected message")
+        IO.inspect(msg, label: "DO_CMD unexpected message")
+    after
+      30_000 ->
+        IO.inspect("TIMED OUT RECEIVE")
     end
   end
 
