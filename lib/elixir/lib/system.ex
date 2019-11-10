@@ -806,11 +806,11 @@ defmodule System do
   end
 
   defp do_cmd(port, acc, fun) do
-    IO.inspect(msg, label: "cmd receive")
+    IO.inspect(acc, label: "cmd receive")
 
     receive do
       {^port, {:data, data}} ->
-        IO.inspect(msg, label: "cmd loop")
+        IO.inspect({acc, data}, label: "cmd loop")
         do_cmd(port, fun.(acc, {:cont, data}), fun)
 
       {^port, {:exit_status, status}} ->
