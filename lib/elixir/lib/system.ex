@@ -798,7 +798,7 @@ defmodule System do
       do_cmd(Port.open({:spawn_executable, cmd}, opts), initial, fun)
     catch
       kind, reason ->
-        IO.inspect(msg, label: "inside catch")
+        IO.inspect({kind, reason}, label: "inside catch")
         fun.(initial, :halt)
         :erlang.raise(kind, reason, __STACKTRACE__)
     else
