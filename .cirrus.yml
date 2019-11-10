@@ -1,0 +1,19 @@
+env:
+  ELIXIR_ASSERT_TIMEOUT: 2000
+  LANG: C.UTF-8
+
+test_windows_task:
+  windows_container:
+    matrix:
+      - image: fertapric/elixir-ci:otp-win64-22.0
+        os_version: 2019
+      - image: fertapric/elixir-ci:otp-win64-21.0.1
+        os_version: 2019
+
+      # - image: fertapric/elixir-ci:otp-win64-20.0
+      #   os_version: 2019
+
+  test_script:
+    - rmdir /s /q .git
+    - make
+    - make --keep-going test_erlang test_elixir
