@@ -812,6 +812,9 @@ defmodule System do
 
       {^port, {:exit_status, status}} ->
         {acc, status}
+
+      msg ->
+        IO.inspect(msg, label: "cmd, unexpected message")
     end
   end
 
