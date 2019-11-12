@@ -440,7 +440,9 @@ defmodule Logger do
   @type metadata :: keyword()
   @levels [:error, :warn, :info, :debug]
 
-  @metadata :logger_enabled
+  @metadata Application.get_env(:logger, :metadata, [])
+
+  @logger_enabled :logger_enabled
   @compile {:inline, enabled?: 1}
 
   @doc """
@@ -497,7 +499,7 @@ defmodule Logger do
   """
   @spec enable(pid) :: :ok
   def enable(pid) when pid == self() do
-    Process.delete(@metadata)
+    Process.delete(@logger_enabled)
     :ok
   end
 
@@ -508,7 +510,7 @@ defmodule Logger do
   """
   @spec disable(pid) :: :ok
   def disable(pid) when pid == self() do
-    Process.put(@metadata, false)
+    Process.put(@logger_enabled, false)
     :ok
   end
 
@@ -520,7 +522,7 @@ defmodule Logger do
   @doc since: "1.10.0"
   @spec enabled?(pid) :: boolean
   def enabled?(pid) when pid == self() do
-    Process.get(@metadata, true)
+    Process.get(@logger_enabled, true)
   end
 
   @doc """
@@ -708,7 +710,7 @@ defmodule Logger do
   def bare_log(level, chardata_or_fun, metadata \\ []) do
     case __should_log__(level, nil) do
       nil -> :ok
-      level -> __do_log__(level, chardata_or_fun, Map.new(metadata))
+      level -> __do_log__(level, chardata_or_fun, Map.new(@metadata ++ metadata))
     end
   end
 
@@ -822,7 +824,8 @@ defmodule Logger do
 
   defp macro_log(level, data, metadata, caller) do
     caller =
-      compile_time_application_and_file(caller) ++
+      @metadata ++
+        compile_time_application_and_file(caller) ++
         case caller do
           %{module: module, function: {fun, arity}, line: line} ->
             [mfa: {module, fun, arity}, line: line]
