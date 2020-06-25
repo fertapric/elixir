@@ -51,8 +51,8 @@ jobs:
           fetch-depth: 50
       - name: Install Shellcheck
         run: |
-          apt update
-          apt install -y shellcheck
+          sudo apt update
+          sudo apt install -y shellcheck
       - name: Check POSIX-compliant
         run: |
           shellcheck -e SC2039,2086 bin/elixir && echo "bin/elixir is POSIX compliant"
