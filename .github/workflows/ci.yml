@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         otp_release: ['OTP-22.3'] #, 'OTP-22.0', 'OTP-21.3.8', 'OTP-21.0']
+        development: [false]
        # include:
        #   - CHECK_POSIX_COMPLIANT: true
        #     CHECK_REPRODUCIBLE: true
