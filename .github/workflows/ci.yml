@@ -33,7 +33,7 @@ jobs:
        # tar zxf otp.tar.gz -C otp --strip-components=1
        # otp/Install -minimal $HOME/otp
        # echo "::add-path::${HOME}/.setup-elixir/otp/bin"
-    - run: pwd
+     - run: pwd
        # rm -rf .git
        # make compile
 
