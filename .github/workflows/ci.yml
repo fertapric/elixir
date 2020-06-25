@@ -29,8 +29,8 @@ jobs:
          wget -O otp.tar.gz https://repo.hex.pm/builds/otp/ubuntu-14.04/${{ matrix.otp_release }}.tar.gz
          mkdir -p otp
          tar zxf otp.tar.gz -C otp --strip-components=1
-         otp/Install -minimal $HOME/otp
-         echo "::add-path::${HOME}/.setup-elixir/otp/bin"
+         otp/Install -minimal $(pwd)/otp
+         echo "::add-path::$(pwd)/otp/bin"
      - run: make compile
        # rm -rf .git
        # make compile
