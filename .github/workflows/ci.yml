@@ -21,8 +21,8 @@ jobs:
    runs-on: ubuntu-14.04
    steps:
      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 50
+       with:
+         fetch-depth: 50
      - name: Install Erlang/OTP
        run: |
           echo $GITHUB_WORKSPACE
