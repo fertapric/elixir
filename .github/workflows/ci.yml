@@ -13,11 +13,11 @@ jobs:
    name: Linux, ${{ matrix.otp_release }}, Ubuntu 16.04
    strategy:
      matrix:
-       otp_release: ['OTP-22.3', 'OTP-22.0', 'OTP-21.3.8', 'OTP-21.0']
-       include:
-         - CHECK_POSIX_COMPLIANT: true
-           CHECK_REPRODUCIBLE: true
-           otp_release: OTP-23.0
+       otp_release: ['OTP-22.3'] #, 'OTP-22.0', 'OTP-21.3.8', 'OTP-21.0']
+       # include:
+       #   - CHECK_POSIX_COMPLIANT: true
+       #     CHECK_REPRODUCIBLE: true
+       #     otp_release: OTP-23.0
    runs-on: ubuntu-16.04
    steps:
      - uses: actions/checkout@v1
@@ -25,15 +25,13 @@ jobs:
          fetch-depth: 50
      - name: Install Erlang/OTP
        run: |
-         pwd
-         echo $RUNNER_TEMP
          cd $RUNNER_TEMP
-       # wget -O otp.tar.gz https://repo.hex.pm/builds/otp/ubuntu-14.04/${{ matrix.otp_release }}.tar.gz
-       # mkdir -p otp
-       # tar zxf otp.tar.gz -C otp --strip-components=1
-       # otp/Install -minimal $HOME/otp
-       # echo "::add-path::${HOME}/.setup-elixir/otp/bin"
-     - run: pwd
+         wget -O otp.tar.gz https://repo.hex.pm/builds/otp/ubuntu-14.04/${{ matrix.otp_release }}.tar.gz
+         mkdir -p otp
+         tar zxf otp.tar.gz -C otp --strip-components=1
+         otp/Install -minimal $HOME/otp
+         echo "::add-path::${HOME}/.setup-elixir/otp/bin"
+     - run: make compile
        # rm -rf .git
        # make compile
 
