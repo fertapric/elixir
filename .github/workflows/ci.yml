@@ -18,7 +18,7 @@ jobs:
          - CHECK_POSIX_COMPLIANT: true
            CHECK_REPRODUCIBLE: true
            otp_release: OTP-23.0
-   runs-on: ubuntu-14.04
+   runs-on: ubuntu-16.04
    steps:
      - uses: actions/checkout@v1
        with:
