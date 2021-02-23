@@ -17,7 +17,7 @@ test_freebsd_task:
 
 
   freebsd_instance:
-    image_family: freebsd-12-1-snap
+    image_family: freebsd-12-2
     cpu: 8
     memory: 7424Mi
 
