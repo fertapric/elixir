@@ -15,6 +15,7 @@ test_freebsd_task:
   name: FreeBSD 12.1
   alias: FreeBSD Stable
 
+
   freebsd_instance:
     image_family: freebsd-12-1-snap
     cpu: 8
