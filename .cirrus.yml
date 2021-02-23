@@ -16,7 +16,7 @@ test_freebsd_task:
   alias: FreeBSD Stable
 
   freebsd_instance:
-    image_family: freebsd-12-1
+    image_family: freebsd-12-1-snap
     cpu: 8
     memory: 7424Mi
 
